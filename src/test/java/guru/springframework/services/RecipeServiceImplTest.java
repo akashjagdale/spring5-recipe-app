@@ -24,7 +24,7 @@ public class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
-
+ 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -36,7 +36,7 @@ public class RecipeServiceImplTest {
     public void getRecipes() throws Exception {
 
         Recipe recipe = new Recipe();
-        HashSet recipesData = new HashSet();
+        HashSet<Recipe> recipesData = new HashSet<Recipe>();
         recipesData.add(recipe);
 
         when(recipeRepository.findAll()).thenReturn(recipesData);
