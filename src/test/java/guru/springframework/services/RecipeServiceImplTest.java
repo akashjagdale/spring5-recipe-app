@@ -1,5 +1,6 @@
 package guru.springframework.services;
 
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
@@ -41,7 +42,7 @@ public class RecipeServiceImplTest {
 	}
 
 	@Test
-	public void getRecipeById() throws Exception {
+	public void getRecipeByIdTest() throws Exception {
 		Recipe recipe = new Recipe();
 		recipe.setId(1L);
 		Optional<Recipe> recipeOptional = Optional.of(recipe);
@@ -56,18 +57,39 @@ public class RecipeServiceImplTest {
 	}
 
 	@Test
-	public void getRecipes() throws Exception {
+	public void getRecipeCoomandByIdTest() throws Exception {
+		Recipe recipe = new Recipe();
+		recipe.setId(1L);
+		Optional<Recipe> recipeOptional = Optional.of(recipe);
+
+		when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+		RecipeCommand recipeCommand = new RecipeCommand();
+		recipeCommand.setId(1L);
+
+		when(recipeToRecipeCommand.convert(any())).thenReturn(recipeCommand);
+
+		RecipeCommand commandById = recipeService.findCommandById(1L);
+
+		assertNotNull("Null recipe returned", commandById);
+		verify(recipeRepository, times(1)).findById(anyLong());
+		verify(recipeRepository, never()).findAll();
+	}
+
+	@Test
+	public void getRecipesTest() throws Exception {
 
 		Recipe recipe = new Recipe();
 		HashSet<Recipe> receipesData = new HashSet<>();
 		receipesData.add(recipe);
 
-		when(recipeService.getRecipes()).thenReturn(receipesData);
+		when(recipeRepository.findAll()).thenReturn(receipesData);
 
 		Set<Recipe> recipes = recipeService.getRecipes();
 
 		assertEquals(recipes.size(), 1);
 		verify(recipeRepository, times(1)).findAll();
+		verify(recipeRepository, never()).findById(anyLong());
 	}
 
 }
