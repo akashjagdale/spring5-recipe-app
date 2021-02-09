@@ -34,7 +34,7 @@ public class IngredientServiceImpl implements IngredientService {
 	public IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId) {
 
 		Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
-		if (!recipeOptional.isEmpty()) {
+		if (!recipeOptional.isPresent()) {
 			log.error("Recipe with id = " + recipeId + " is not found");
 		}
 
