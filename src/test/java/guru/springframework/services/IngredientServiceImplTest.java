@@ -84,6 +84,7 @@ public class IngredientServiceImplTest {
 	public void testSaveOrUpdateIngredient() {
 		IngredientCommand command = new IngredientCommand();
 		command.setId(3L);
+		command.setDescription("aaa");
 		command.setRecipeId(2L);
 
 		Optional<Recipe> recipeOptional = Optional.of(new Recipe());

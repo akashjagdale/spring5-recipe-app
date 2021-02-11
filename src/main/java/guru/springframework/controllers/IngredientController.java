@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import guru.springframework.commands.IngredientCommand;
+import guru.springframework.commands.RecipeCommand;
+import guru.springframework.commands.UnitOfMeasureCommand;
 import guru.springframework.services.IngredientService;
 import guru.springframework.services.RecipeService;
 import guru.springframework.services.UnitOfMeasureService;
@@ -48,10 +50,28 @@ public class IngredientController {
 	}
 
 	@GetMapping
+	@RequestMapping("/recipe/{recipeId}/ingredient/new")
+	public String newRecipeIngredient(@PathVariable String recipeId, Model model) {
+		Long recipeIdWrapper = Long.valueOf(recipeId);
+		RecipeCommand recipeCommand = recipeService.findCommandById(recipeIdWrapper);
+
+		IngredientCommand ingredientCommand = new IngredientCommand();
+		ingredientCommand.setRecipeId(recipeIdWrapper);
+
+		model.addAttribute("ingredient", ingredientCommand);
+
+		ingredientCommand.setUom(new UnitOfMeasureCommand());
+
+		model.addAttribute("uomList", uomService.listAllUoms());
+
+		return "recipe/ingredient/ingredientform";
+	}
+
+	@GetMapping
 	@RequestMapping("/recipe/{recipeId}/ingredients/{id}/update")
 	public String updateRecipeIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
-		model.addAttribute("ingredient", ingredientService.saveOrUpdateIngredient(
-				ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id))));
+		model.addAttribute("ingredient",
+				ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
 		model.addAttribute("uomList", uomService.listAllUoms());
 		return "recipe/ingredient/ingredientform";
 	}
