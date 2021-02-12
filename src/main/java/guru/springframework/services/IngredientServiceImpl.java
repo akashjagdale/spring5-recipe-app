@@ -4,6 +4,9 @@
 package guru.springframework.services;
 
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,6 +102,25 @@ public class IngredientServiceImpl implements IngredientService {
 
 			return ingredientToCommand.convert(savedIngredientOptional.get());
 		}
+	}
+
+	@Override
+	public void deleteIngredientById(Long recipeId, Long id) {
+		Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+		if (!recipeOptional.isPresent()) {
+			log.error("Recipe Not found with id :: " + recipeId);
+		} else {
+			Recipe recipe = recipeOptional.get();
+			Optional<Ingredient> optionalIngredient = recipe.getIngredients().stream()
+					.filter(ingredient -> ingredient.getId().equals(id)).findFirst();
+			if (optionalIngredient.isPresent()) {
+				Ingredient ingredientToDelete = optionalIngredient.get();
+				ingredientToDelete.setRecipe(null);
+				recipe.getIngredients().remove(optionalIngredient.get());
+				recipeRepository.save(recipe);
+			}
+		}
+
 	}
 
 }
