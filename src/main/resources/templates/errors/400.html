@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>40) Bad Request Error</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet"
+          th:href="@{/webjars/bootstrap/3.4.1/css/bootstrap.min.css}">
+
+    <script type="text/javascript"
+            th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script th:src="@{/webjars/bootstrap/3.4.1/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container-fluid" style="margin-top: 20px">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <h1>400 Bad Request</h1>
+            <h3 th:text="${exception.getMessage()}"></h3>
+        </div>
+    </div>
+</div>
+</body>
+</html>
