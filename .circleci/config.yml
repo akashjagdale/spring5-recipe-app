@@ -21,6 +21,7 @@ jobs:
           paths:
             - ~/.m2
           key: maven-{{ checksum "/tmp/maven_cache_seed" }}
+
        # run tests! and gen code coverage
       - run: mvn integration-test cobertura:cobertura
 
@@ -29,7 +30,7 @@ jobs:
 
       - run:
           name: Send to CodeCov
-          command: bash <(curl -s https://codecov.io/bash)
+          command: bash <(curl -s https://codecov.io/bash) -t 16a67728-d0d8-495c-b0e9-fdbef68d2533
 
 workflows:
   maven_test:
